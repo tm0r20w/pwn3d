@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <title id="ptitle">Random Traffic Generator</title>
+ <link rel="copyright" href="//creativecommons.org/publicdomain/zero/1.0/" />
+ <link rel="license" href="//creativecommons.org/publicdomain/zero/1.0/" />   
+<!--
+English:
+Here is no copyright -  CC0 1.0 Universal (CC0 1.0) Public Domain Dedication 
+
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
+
+You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+
+Russian:
+Нет авторских прав на содержимое данного файла.
+
+Открытая лицанзия CC0 1.0 Универсальная (CC0 1.0) - Передача в общественное достояние 
+https://creativecommons.org/publicdomain/zero/1.0/deed.ru
+
+Лицо, которое связало произведение с этим Кратким описанием (Commons Deed), передало произведение в общественное достояние путём отказа от всех своих прав на произведение по всему миру в рамках законодательства об авторских правах, включая все связанные и смежные права, которые он или она имеют по отношению к данному произведению, в той степени, в которой это допускается законом.
+
+Вы можете копировать, изменять, распространять и исполнять данное произведение, даже в коммерческих целях, всё не спрашивая разрешения. 
+
+-->
+
+ <style>
+ <!--
+  h1 {
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 2em;
+   font-weight: bold;
+   text-align: center;
+  }
+  p {text-align: justify; }
+ -->
+ </style>
+</head>
+<body>
+ <noscript>
+  <p>Your browser desn't support JavaScript or JavaScript is turned off. Please enable JavaScript, this is neccessary for correct work of random traffic generator.</p>
+  <p>Ваш браузер не поддерживает JavaScript или поддержка JavaScript отключена. Пожалуйста, включите поддержку JavaScript - она требуется дла работы генератора случайного трафика</p>
+ </noscript>
+ Language / язык:
+ <select id='langselect' onChange="onChg(this);" disabled="disabled">
+   <option value="en" selected="selected" id="engopt">english</option>
+   <option value="ru">русский</option>
+ </select>
+ <h1 id="hh1">The Random Traffic Generator</h1>
+ <p id="pupdown">For better protection from timing-attack it's recomended to start downloading of large file (i.e. <a href="http://cdimage.debian.org/debian-cd/8.1.0/i386/iso-dvd/debian-8.1.0-i386-DVD-2.iso" target="_blank">debian-8.1.0-i386-DVD-2.iso</a>&nbsp;4.3&nbsp;GB), uploading of another one (on <a href="https://letitbit.net/?lang=en" target="_blank">letitbit.net</a> for example) and start this Random Traffic Generator to work all of it simultaneously; you can cancel loading of delete files after.</p>
+ <p id="rti">Random time interval between requests will be:</p>
+
+ <form id="form">
+  <span id="s1">from</span> <input type="number" value="3" min="0" name="min" id="min" onChange="onChg(this);" disabled="disabled" /> <span id="s2">to</span> <input type="number" value="10" min="0" name="max" id="max" onChange="onChg(this);" disabled="disabled" /> <span id="s3">seconds</span>.<br />
+  <span id="s4">URLs for random HTTP-requests:</span><br />
+  <textarea id="urlarea" cols="80" rows="10" disabled="disabled">https://www.bing.com/search?q=$R
+https://www.baidu.com/s?ie=utf-8&amp;f=3&amp;rsv_bp=0&amp;rsv_idx=1&amp;tn=baidu&amp;wd=$R
+https://startpage.com/do/search?cat=web&amp;cmd=process_search&amp;language=english&amp;query=$R
+https://yandex.ru/search/?text=$R
+http://go.mail.ru/search?mailru=1&amp;q=$R
+http://nova.rambler.ru/search?r0_split=wthr_infs&amp;query=$R
+https://en.wikipedia.org/wiki/Special:Random</textarea>
+  <br />
+  <b>$R</b> <span id="s5">will be replaced with a random number between</span> <input type="number" value="77" name="rndmin" id="rndmin" onChange="onChg(this);" disabled="disabled" /> <span id="s6">and</span> <input type="number" value="7777" name="rndmax" id="rndmax" onChange="onChg(this);" disabled="disabled" />
+  <br />
+  <span id="s7">Number or frames for streams (HTTP-connections):</span> <input type="number" value="3" min="1" name="nstreams" id="nstreams" onChange="onChg(this);" disabled="disabled" /><input type="checkbox" name="visframes" id="visframes" value="off"	 onChange="onChg(this)" disabled="disabled" /><label for="visframes" id="lbl">visible frames</label>  
+  <br /> 
+  <input type="checkbox" name="outpost" id="outpost" checked="checked" value="on" onChange="onChg(this)" disabled="disabled" /><label for="outpost" id="lbl2">Add random length HTTP-header to each request to obsfucate outgoing traffic</label>  
+  <br />
+  <span id="s8">Length of this header will be from</span> <input type="number" value="18" min="18" name="minouts" id="minouts" onChange="onChg(this);" disabled="disabled" /> <span id="s9">to</span> <input type="number" value="1800" min="18" name="maxouts" id="maxouts" onChange="onChg(this);" disabled="disabled" /> <span id="s10">bytes</span>
+  <br />
+  <input type="checkbox" name="jsiframe" id="jsiframe" checked="checked" value="on" onChange="onChg(this)" disabled="disabled" /><label for="jsiframe" id="lbl3">Enable JavaScript in frames (required if add HTTP-header selected)</label>  
+  <br />
+  
+  <input type="button" value="Start" onClick="startit();" style="background: green; color: yellow;" id="startbutt" disabled="disabled" />
+  <input type="button" value="Stop" onClick="stopit();" style="background: red; color: yellow;" id="stopbutt" disabled="disabled" />
+  <input type="button" value="Reload" onClick="reload_page();" id="reloadbutt" disabled="disabled" />
+ </form>
+ <br />
+ <br />
+ <div id="foriframes"></div>
+ <p id="copyleft" style="font-size: 0.9em;"><span style="text-decoration: line-through; color: green;">&copy;</span> <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0 Universal (CC0 1.0) Public Domain Dedication</a>. The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law. You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.</p>
+<script>
+<!--
+var rqrmin, rqrmax, minint, maxint, reqon, streams, timerout, minouts, maxouts, outpost, visstr, hs, sboxstr;
+var timers=[], urls=[], treqs=[];
+
+function InitGlbVar() {
+ rqrmin=77; rqrmax=7777; minint=3000; maxint=10000; reqon=false; streams=3; minouts=18; maxouts=1800; outpost=true; visstr='style="display: none;"'; hs='0123456789ABCDEF\n', sboxstr='allow-forms allow-scripts';
+}
+InitGlbVar();
+
+var loclang= { 
+ ru:
+  [['ptitle','innerHTML','Генератор случайного трафика'],
+   ['pupdown','innerHTML','Для лучшей защиты от тайминг-атак рекомендуется параллельно запустить скачивание одного большого файла (например: <a href="http://cdimage.debian.org/debian-cd/8.1.0/i386/iso-dvd/debian-8.1.0-i386-DVD-2.iso" target="_blank">debian-8.1.0-i386-DVD-2.iso</a>&nbsp;4.3&nbsp;ГБ), загрузку другого (например, на <a href="https://letitbit.net/?lang=ru" target="_blank">letitbit.net</a>) и данный Генератор случайного трафика; после Вы можете отменить загрузку или удалить файлы.'],
+   ['hh1','innerHTML','Генератор случайного трафика'],
+   ['rti','innerHTML','Интервал времени между запросами будет случайный в пределах'],
+   ['s1','innerHTML','от'],
+   ['s2','innerHTML','до'],
+   ['s3','innerHTML','секунд'],
+   ['s4','innerHTML','Будут случайно опрашиваться следующие URL-адреса:'],
+   ['s5','innerHTML','будет заменено на случайное целое число в диапазоне между'],
+   ['s6','innerHTML','и'],
+   ['s7','innerHTML','Количество фреймов для HTTP-соединений:'],
+   ['lbl','innerHTML','показывать фреймы'],
+   ['lbl2','innerHTML','Покрывать исходящий трафик, добавляя к каждому запросу HTTP-заголовок произвольной длины'],
+   ['lbl3','innerHTML','Запускать JavaScript во фреймах (требуется, если выбрано покрывать исходящий трафик)'],
+   ['s8','innerHTML','от'],
+   ['s9','innerHTML','до'],
+   ['s10','innerHTML','байт'],
+   ['startbutt','value','Пуск'],
+   ['stopbutt','value','Стоп'],
+   ['reloadbutt','value','Обновить'],
+   ['copyleft','innerHTML','<span style="text-decoration: line-through; color: green;">&copy;</span> <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.ru" target="_blank">Открытая лицанзия CC0 1.0 Универсальная (CC0 1.0) - Передача в общественное достояние</a>. Лицо, которое связало произведение с этим Кратким описанием (Commons Deed), передало произведение в общественное достояние путём отказа от всех своих прав на произведение по всему миру в рамках законодательства об авторских правах, включая все связанные и смежные права, которые он или она имеют по отношению к данному произведению, в той степени, в которой это допускается законом. Вы можете копировать, изменять, распространять и исполнять данное произведение, даже в коммерческих целях, всё не спрашивая разрешения.']
+  ],
+ en: [] 
+};
+
+function IR(minr, maxr) { return( Math.floor( Math.random()*(maxr-minr+1) ) + minr); }
+
+function CT() {
+ var d=new Date();
+ var t=d.getTime();
+ delete d;
+ return(t);
+}
+
+function EnaObj() {
+ var i=0;
+ for (i=0; i<arguments.length; i++) 
+  document.getElementById(arguments[i]).disabled=false;
+}
+
+function EnaAllObj() {
+ var i=0;
+ for (i=0; i<document.all.length; i++)
+  if (document.all[i].disabled) document.all[i].disabled=false;
+ for (i=0; i<arguments.length; i++) document.getElementById(arguments[i]).disabled=true;
+}
+
+function DisObj() {
+ var i=0;
+ for (i=0; i<arguments.length; i++) document.getElementById(arguments[i]).disabled=true;
+}
+
+function onChg(obj) {
+ switch (obj.id) {
+  case 'min':
+   if (obj.value*1000<=maxint) minint=obj.value*1000;
+   break;
+  case 'max':
+   if (obj.value*1000>=minint) maxint=obj.value*1000;
+   break;
+  case 'rndmin':
+   rqrmin=obj.value;
+   break;
+  case 'rndmax':
+   rqrmax=obj.value;
+   break;
+  case 'nstreams':
+   streams=obj.value;
+   break;
+  case 'minouts':
+   minouts=obj.value;
+   break;
+  case 'maxouts':
+   maxouts=obj.value;
+   break;
+  case 'outpost':
+   outpost=!outpost;
+   var jf=document.getElementById('jsiframe');
+   if (outpost) {
+    EnaObj('minouts', 'maxouts');
+    sboxstr='allow-forms allow-scripts';
+    jf.checked=true;
+    jf.disabled=true;
+   }
+   else { 
+    DisObj('minouts', 'maxouts');
+    sboxstr='';
+    jf.disabled=false;
+   }
+   break;
+  case 'jsiframe':
+   if (obj.checked) sboxstr='allow-forms allow-scripts'; else sboxstr='';
+   break;
+  case 'visframes':
+   if (obj.checked) visstr=''; else visstr='style="display: none;"';
+   break;
+  case 'langselect':
+   for (i=0; i<loclang[obj.value].length; i++) document.getElementById(loclang[obj.value][i][0])[loclang[obj.value][i][1]]=loclang[obj.value][i][2];
+ }
+}
+
+function stopit() {
+ EnaObj('startbutt','urlarea','nstreams','visframes', 'jsiframe', 'outpost');
+ DisObj('stopbutt');
+ reqon=false;
+ var i=0;
+ clearInterval(timerout);
+ for (i=0; i<streams; i++) clearTimeout(timers[i]);
+}
+
+function reload_page() {
+ stopit();
+
+ InitGlbVar();
+ EnaAllObj('stopbutt', 'jsiframe');
+
+ document.getElementById('nstreams').value=streams;
+ document.getElementById('visframes').checked = false;
+ document.getElementById('outpost').checked=outpost;
+ document.getElementById('jsiframe').checked=true;
+ document.getElementById('min').value=minint/1000;
+ document.getElementById('max').value=maxint/1000;
+ document.getElementById('rndmin').value=rqrmin;
+ document.getElementById('rndmax').value=rqrmax;
+ document.getElementById('minouts').value=minouts;
+ document.getElementById('maxouts').value=maxouts;
+ document.getElementById('engopt').selected=true;
+
+ location.reload();
+}
+
+function req(fi, imm) {
+ treqs[fi]=CT();
+ if (reqon) 
+  timers[fi]=setTimeout( function()
+  {
+   var i=0;   
+   var df=document.getElementById('f'+fi);
+   var newurl=urls[IR(0,urls.length-1)].replace('$R', IR(rqrmin,rqrmax));
+   if (outpost) {
+    var str='';
+    for (i=1; i<=IR(minouts/18,maxouts/18); i++) str+=hs;
+    df.srcdoc=
+    '<form action="'+newurl+'" method="POST"> \
+      <textarea name="rndt">'+str+'</textarea> \
+      <input type="submit" value="put" /> \
+     </form> \
+    <script type="text/javascript">document.forms[0].submit();</script>';
+   
+   } else df.contentWindow.location.replace(newurl);
+  }, (imm)?0:IR(minint, maxint) ); 
+}
+
+function startit() {
+ var instr='';
+ var i=0;
+ for (i=0; i<streams; i++) instr+='<iframe sandbox="'+sboxstr+'" '+'id="f'+i+'" '+visstr+' onload="req('+i+', false)" onerror="req('+i+', false)" ></iframe>';
+ document.getElementById('foriframes').innerHTML=instr;
+ 
+ DisObj('nstreams','visframes','startbutt','urlarea', 'jsiframe', 'outpost');
+ EnaObj('stopbutt');
+
+ urls=document.getElementById('urlarea').value.split('\n');
+
+ minint=document.getElementById('min').value*1000;
+ maxint=document.getElementById('max').value*1000;
+
+ reqon=true;
+ for (i=0; i<streams; i++) req(i, false);
+
+ timerout=setInterval( function() {
+  var t=CT();
+  for (i=0; i<streams; i++) if (t-treqs[i]>maxint) req(i, true);
+ }, (minint+maxint)/2 );
+
+}
+
+var mi=0;
+
+for (mi=0; mi<loclang.ru.length; mi++) {
+ loclang.en[mi]=[];
+ loclang.en[mi][0]=loclang.ru[mi][0];
+ loclang.en[mi][1]=loclang.ru[mi][1];
+ loclang.en[mi][2]=document.getElementById(loclang.ru[mi][0])[loclang.ru[mi][1]];
+}
+
+
+EnaAllObj('stopbutt', 'jsiframe');
+
+-->
+</script>
+  
+</body>
+</html>
